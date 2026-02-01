@@ -74,12 +74,13 @@ public class CarRepository {
                 "FROM Cars c " +
                 "JOIN Models m ON c.model_id = m.id " +
                 "JOIN Brands b ON m.brand_id = b.id " +
-                "WHERE b.name LIKE ? OR m.name LIKE ?";
+                "WHERE b.name LIKE ? OR m.name LIKE ? OR c.status LIKE ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, "%" + keyword + "%");
             stmt.setString(2, "%" + keyword + "%");
+            stmt.setString(3, "%" + keyword + "%");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {
                 cars.add(rs.getString(2) + " " + rs.getString(3) + " (" + rs.getInt(4) + ") [ID: " + rs.getInt(1) + "]");
@@ -116,7 +117,7 @@ public class CarRepository {
         }
     }
     public void showAllBrands() {
-        String sql = "SELECT * FROM Brands";
+        String sql = "SELECT * FROM Brands GROUP BY id";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);

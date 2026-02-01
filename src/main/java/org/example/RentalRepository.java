@@ -1,6 +1,8 @@
 package org.example;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RentalRepository {
 
@@ -86,7 +88,7 @@ public class RentalRepository {
             conn.commit();
             System.out.println("SUKCES: Auto zwrócone.");
             System.out.println("=========================================");
-            System.out.printf("DO ZAPŁATY: %.2f PLN (Wyliczone przez bazę)\n", cost);
+            System.out.printf("DO ZAPŁATY: %.2f PLN \n", cost);
             System.out.println("=========================================");
 
         } catch (SQLException e) {
@@ -100,5 +102,42 @@ public class RentalRepository {
                 if (conn != null) conn.close();
             } catch (SQLException e) { e.printStackTrace(); }
         }
+    }
+    public List<String> getRentalHistory(){
+        List<String> rentals = new ArrayList<>();
+
+        String sql = "SELECT r.id, cl.first_name AS client_name, cl.last_name AS client_last_name ,ca.registration_number AS registration," +
+                "a.username AS employee, r.date_start, r.date_returned, r.start_mileage, r.end_mileage, r.total_cost " +
+                "FROM Rentals r " +
+                "JOIN Clients cl ON r.client_id = cl.id " +
+                "JOIN Cars ca ON r.car_id = ca.id " +
+                "JOIN AppUsers a ON r.user_id = a.id";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String clientName = rs.getString("client_name");
+                String clientLastName = rs.getString("client_last_name");
+                String registration = rs.getString("registration");
+                String username = rs.getString("employee");
+                String dateStart = rs.getString("date_start");
+                String dateReturned = rs.getString("date_returned");
+                int startMileage = rs.getInt("start_mileage");
+                int endMileage = rs.getInt("end_mileage");
+                double totalCost = rs.getDouble("total_cost");
+
+                String carInfo = String.format("[%d] Klient: %s %s | Rejestracja: %s | Pracownik; %s |Od %s Do %s | Przejechano: %d Km | Cena: %.2f",
+                        id, clientName, clientLastName, registration, username, dateStart, dateReturned, endMileage-startMileage, totalCost);
+                rentals.add(carInfo);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rentals;
     }
 }

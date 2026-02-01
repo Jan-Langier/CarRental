@@ -203,7 +203,8 @@ public class CarRentalApp {
             String p = scanner.nextLine();
             userRepository.addEmployee(l, p);
         } else if (sub.equals("3")) {
-            System.out.print("Podaj login do usunięcia: ");
+            userRepository.getAllEmployees().forEach(System.out::println);
+            System.out.print("Podaj id do usunięcia: ");
             String l = scanner.nextLine();
             userRepository.deleteEmployee(l, currentAppUser);
         }
@@ -327,6 +328,7 @@ public class CarRentalApp {
         System.out.println("\n--- STREFA WYPOŻYCZEŃ ---");
         System.out.println("1. Wydaj samochód (Wypożyczenie)");
         System.out.println("2. Odbierz samochód (Zwrot)");
+        System.out.println("3. Sparwdź historię");
         System.out.print("Wybierz: ");
         String sub = scanner.nextLine();
 
@@ -354,6 +356,8 @@ public class CarRentalApp {
             int mileage = Integer.parseInt(scanner.nextLine());
 
             rentalRepository.returnCar(carId, mileage);
+        } else if (sub.equals("3")){
+            rentalRepository.getRentalHistory().forEach(System.out::println);
         } else {
             System.out.println("Anulowano.");
         }

@@ -22,7 +22,7 @@ public class DatabaseConnection {
     }
 
     public static void switchToAdminMode(String rootPassword) {
-        currentDbUser = "root";
+        currentDbUser = "admin";
         currentDbPassword = rootPassword;
         System.out.println(">>> TRYB ADMINA (DB ROOT) AKTYWOWANY <<<");
     }

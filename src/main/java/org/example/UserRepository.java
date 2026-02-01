@@ -48,7 +48,7 @@ public class UserRepository {
             return false;
         }
 
-        String sql = "DELETE FROM AppUsers WHERE username = ? AND role = 'Employee'";
+        String sql = "DELETE FROM AppUsers WHERE id = ? AND role = 'Employee'";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -63,7 +63,7 @@ public class UserRepository {
 
     public List<String> getAllEmployees() {
         List<String> employees = new ArrayList<>();
-        String sql = "SELECT id, username, role FROM AppUsers ORDER BY id";
+        String sql = "SELECT id, username, role FROM AppUsers WHERE role = 'Employee' ORDER BY id";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
