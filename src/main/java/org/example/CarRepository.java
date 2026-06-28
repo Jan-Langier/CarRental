@@ -156,24 +156,32 @@ public class CarRepository {
     }
 
     public void sendToService(int id){
-        String sql = "UPDATE Cars SET status = 'Serwis' WHERE id = ?";
+        String sql = "UPDATE Cars SET status = 'Serwis' WHERE id = ? AND status = 'Dostepny'";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            stmt.executeUpdate();
-            System.out.println("Wysłano model "+ id +" do serwisu");
+            int rows = stmt.executeUpdate();
+            if (rows == 0){
+                System.out.println("Model "+ id +" jest już w serwisie");
+            }else {
+                System.out.println("Wysłano model " + id + " do serwisu");
+            }
         } catch (SQLException e) {
             System.err.println("Błąd wysyłania modelu na serwis: " + e.getMessage());
         }
     }
 
     public void getFromService(int id){
-        String sql = "UPDATE Cars SET status = 'Dostepny' WHERE id = ?";
+        String sql = "UPDATE Cars SET status = 'Dostepny' WHERE id = ? AND status = 'Serwis'";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            stmt.executeUpdate();
-            System.out.println("Zwrócono model "+ id +" z serwisu");
+            int rows = stmt.executeUpdate();
+            if (rows == 0){
+                System.out.println("Model "+ id +" nie jest w serwisie");
+            }else {
+                System.out.println("Zwrócono model " + id + " z serwisu");
+            }
         } catch (SQLException e) {
             System.err.println("Błąd zwracania modelu z serwisu: " + e.getMessage());
         }

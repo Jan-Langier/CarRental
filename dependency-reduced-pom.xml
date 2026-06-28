@@ -28,7 +28,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>CarRentalApp</mainClass>
+                  <mainClass>org.example.CarRentalApp</mainClass>
                 </transformer>
               </transformers>
             </configuration>

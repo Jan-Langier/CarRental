@@ -364,6 +364,26 @@ public class CarRentalApp {
     }
 
     public static void main(String[] args) {
-        new CarRentalApp().start();
+        final Scanner scanner;
+        scanner = new Scanner(System.in);
+        System.out.println("Wybierz tryb aplikacji: ");
+        System.out.println("1. Tryb Konsolowy");
+        System.out.println("2. Tryb Okienkowy(build in progress)");
+        System.out.println("0. Wyjdź");
+        System.out.print("> ");
+        String tryb = scanner.nextLine();
+        switch (tryb){
+            case "1":
+                new CarRentalApp().start();
+                break;
+            case "2":
+                //new GuiCarRentalApp().start();
+                break;
+            case "0":
+                System.out.println("Do widzenia!");
+                break;
+            default:
+                System.out.println("Niepoprawny tryb aplikacji");
+        }
     }
 }
